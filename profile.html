@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile | Nextgen Tuition</title>
+    <link rel="icon" type="image/jpeg" href="cap.jpg.jpeg">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ---------------- Reset & Modern Variables ---------------- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+        :root { --primary-green: #059669; --primary-blue: #6366F1; --primary-blue-light: #EEF2FF; --dark: #0F172A; --gray: #64748B; --border: #E2E8F0; --bg-main: #F4F7FE; --shadow-soft: 0 10px 30px rgba(0,0,0,0.03); }
+        body { background: var(--bg-main); color: #334155; display: flex; min-height: 100vh; overflow-x: hidden; }
+
+        .sidebar { width: 280px; background: rgba(255, 255, 255, 0.95); height: 100vh; position: fixed; padding: 30px 20px; box-shadow: 5px 0 25px rgba(0,0,0,0.02); z-index: 100; backdrop-filter: blur(10px); border-right: 1px solid #fff; }
+        .sidebar-logo { font-size: 1.6rem; font-weight: 700; color: var(--primary-blue); display: flex; align-items: center; gap: 12px; padding: 0 10px 30px; border-bottom: 1px dashed var(--border); text-decoration: none; margin-bottom: 20px; }
+        .nav-menu { list-style: none; }
+        .nav-menu li { margin-bottom: 10px; }
+        .nav-menu li a { display: flex; align-items: center; gap: 15px; padding: 14px 20px; color: var(--gray); text-decoration: none; font-weight: 500; border-radius: 12px; transition: all 0.3s ease; font-size: 0.95rem; }
+        .nav-menu li a:hover { background: var(--primary-blue-light); color: var(--primary-blue); transform: translateX(5px); }
+        .nav-menu li.active a { background: var(--primary-blue); color: #fff; box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3); }
+        .logout-wrap { position: absolute; bottom: 30px; width: calc(100% - 40px); }
+        .logout-btn { display: flex; align-items: center; gap: 15px; padding: 14px 20px; color: #EF4444; text-decoration: none; font-weight: 600; border-radius: 12px; transition: 0.3s; cursor: pointer; background: #FEF2F2; border: 1px solid #FCA5A5; }
+        .logout-btn:hover { background: #EF4444; color: #fff; }
+
+        .main-content { margin-left: 280px; padding: 40px; width: calc(100% - 280px); }
+        .top-bar { max-width: 1050px; margin: 0 auto 30px; background: rgba(255, 255, 255, 0.8); border-radius: 20px; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-soft); backdrop-filter: blur(10px); border: 1px solid #fff; }
+        .logo-area { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--primary-blue); font-size: 1.8rem; font-weight: 800; }
+        .phone-badge { padding: 10px 20px; border-radius: 30px; display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--primary-blue); font-size: 0.95rem; background: #fff; border: 1px solid var(--border); }
+
+        .profile-wrapper { max-width: 1050px; margin: 0 auto; }
+        .profile-summary { background: linear-gradient(135deg, #ffffff 0%, #F8FAFC 100%); border-radius: 24px; padding: 35px 40px; border: 1px solid #fff; box-shadow: var(--shadow-soft); margin-bottom: 30px; }
+        .profile-top-row { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; }
+        .profile-pic-wrap { width: 100px; height: 100px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; border: 4px solid #fff; font-size: 2.5rem; color: #94A3B8; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+        .profile-pic-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-text-area h1 { font-size: 1.8rem; font-weight: 800; color: var(--dark); margin-bottom: 5px; }
+        .profile-text-area .salary { color: var(--primary-blue); font-weight: 600; font-size: 0.95rem; background: var(--primary-blue-light); padding: 5px 15px; border-radius: 20px; display: inline-block; margin-bottom: 8px;}
+        .profile-text-area .bio-text { color: #475569; font-size: 0.95rem; line-height: 1.6; max-width: 600px;}
+
+        .tabs-header { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; background: #fff; border-radius: 16px; box-shadow: var(--shadow-soft); margin-bottom: 25px; justify-content: center; }
+        .tab-btn { padding: 10px 18px; background: transparent; border: none; font-weight: 600; color: var(--gray); cursor: pointer; border-radius: 12px; transition: all 0.3s; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; flex-grow: 1; justify-content: center; }
+        .tab-btn:hover { background: var(--light-gray); color: var(--dark); }
+        .tab-btn.active { background: var(--primary-green); color: #fff; box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3); }
+
+        .tab-content-area { background: #fff; border-radius: 24px; padding: 40px; box-shadow: var(--shadow-soft); border: 1px solid #fff;}
+        .tab-pane { display: none; animation: fadeIn 0.4s ease; }
+        .tab-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-title { font-size: 1.25rem; font-weight: 700; color: var(--dark); margin-bottom: 5px; display: flex; align-items: center; gap: 10px;}
+        .section-desc { color: var(--gray); font-size: 0.9rem; margin-bottom: 25px; padding-bottom: 15px;}
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px;}
+
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .input-group label { font-size: 0.9rem; font-weight: 600; color: #1E293B; margin-left: 2px;}
+        .input-group label span { color: #EF4444; }
+
+        .form-input, .form-select { width: 100%; padding: 14px 20px; border: 1px solid var(--border); border-radius: 12px; font-size: 0.95rem; outline: none; background: #fff; transition: all 0.3s ease; color: var(--dark); font-weight: 500; }
+        .form-input:focus, .form-select:focus { border-color: var(--primary-green); box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1); }
+
+        .upload-zone-wrapper { display: flex; gap: 20px; align-items: center; border: 2px dashed #CBD5E1; padding: 20px; border-radius: 16px; background: #F8FAFC; transition: 0.3s; cursor: pointer;}
+        .upload-zone-wrapper:hover { border-color: var(--primary-green); background: #ECFDF5;}
+        .upload-icon { width: 60px; height: 60px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--primary-green); box-shadow: 0 4px 10px rgba(0,0,0,0.05);}
+
+        .btn-save-bottom { width: 100%; padding: 15px; background: var(--primary-green); color: #fff; border: none; border-radius: 12px; font-weight: 600; font-size: 1.05rem; margin-top: 20px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 20px rgba(5, 150, 105, 0.2); }
+        .btn-save-bottom:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(5, 150, 105, 0.3); background: #047857;}
+
+        @media (max-width: 992px) { .sidebar { transform: translateX(-100%); } .main-content { margin-left: 0; padding: 20px; width: 100%; } }
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+    </style>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+    <div class="sidebar">
+        <a href="dashboard.html" class="sidebar-logo"><i class="fa-solid fa-graduation-cap"></i> Nextgen</a>
+        <div class="logout-wrap">
+            <div class="logout-btn" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <a href="dashboard.html" class="logo-area"><i class="fa-solid fa-graduation-cap"></i><span>Nextgen</span></a>
+            <div class="phone-badge"><i class="fa-regular fa-circle-user"></i> <span id="navUserContact">Loading...</span></div>
+        </div>
+
+        <div class="profile-wrapper">
+            <div class="profile-summary">
+                <div class="profile-top-row">
+                    <div class="profile-pic-wrap" id="profilePicWrap">
+                        <i class="fa-regular fa-user" id="picPlaceholder"></i>
+                        <img src="" id="profilePicImg" style="display:none;">
+                    </div>
+                    <div class="profile-text-area">
+                        <h1 id="displayName">—</h1>
+                        <p class="salary">Expected Salary: <span id="displaySalary">Not Set</span></p>
+                        <p class="bio-text" id="displayBio">আপনার বায়ো এখানে দেখা যাবে।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabs-wrapper">
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="switchTab('tabInfo', this)"><i class="fa-regular fa-id-card"></i> Personal Info</button>
+                    <button class="tab-btn" onclick="switchTab('tabPhotos', this)"><i class="fa-regular fa-image"></i> Photos</button>
+                    <button class="tab-btn" onclick="switchTab('tabEducation', this)"><i class="fa-solid fa-graduation-cap"></i> Education</button>
+                    <button class="tab-btn" onclick="switchTab('tabTeaching', this)"><i class="fa-solid fa-chalkboard-user"></i> Teaching</button>
+                    <button class="tab-btn" onclick="switchTab('tabLocation', this)"><i class="fa-solid fa-map-location-dot"></i> Location</button>
+                    <button class="tab-btn" onclick="switchTab('tabExperience', this)"><i class="fa-solid fa-briefcase"></i> Experience</button>
+                    <button class="tab-btn" onclick="switchTab('tabBio', this)"><i class="fa-regular fa-file-lines"></i> Bio</button>
+                    <button class="tab-btn" onclick="switchTab('tabSecurity', this)"><i class="fa-solid fa-lock"></i> Security</button>
+                </div>
+
+                <div class="tab-content-area">
+
+                    <!-- INFO -->
+                    <div id="tabInfo" class="tab-pane active">
+                        <div class="section-title">Personal Information</div>
+                        <div class="grid-2">
+                            <div class="input-group"><label>Full Name (English) <span>*</span></label><input type="text" id="inpName" class="form-input" placeholder="e.g. Rasel Mahmud"></div>
+                            <div class="input-group"><label>Full Name (Bangla)</label><input type="text" id="inpNameBn" class="form-input" placeholder="উদাঃ রাসেল মাহমুদ"></div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="input-group"><label>Gender</label><input type="text" id="inpGender" class="form-input" placeholder="e.g. Male / Female"></div>
+                            <div class="input-group"><label>Email Address</label><input type="email" id="inpEmail" class="form-input" placeholder="example@mail.com"></div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="input-group"><label>WhatsApp Number</label><input type="text" id="inpWhatsapp" class="form-input" placeholder="01XXXXXXXXX"></div>
+                            <div class="input-group"><label>Date of Birth</label><input type="date" id="inpDob" class="form-input"></div>
+                        </div>
+                        <button class="btn-save-bottom" onclick="saveInfo()">Save Info</button>
+                    </div>
+
+                    <!-- PHOTOS -->
+                    <div id="tabPhotos" class="tab-pane">
+                        <div class="section-title">Profile Photos</div>
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label>Profile Picture</label>
+                                <label class="upload-zone-wrapper">
+                                    <div class="upload-icon"><i class="fa-regular fa-image"></i></div>
+                                    <div><h4>Click to Browse</h4><p>PNG, JPG up to 2MB</p></div>
+                                    <input type="file" accept="image/*" style="display:none;" onchange="uploadProfilePic(this)">
+                                </label>
+                            </div>
+                            <div class="input-group">
+                                <label>Student ID Photo</label>
+                                <label class="upload-zone-wrapper">
+                                    <div class="upload-icon" style="color:var(--primary-blue);"><i class="fa-regular fa-id-card"></i></div>
+                                    <div><h4>Upload Student ID</h4><p>Secure & Private</p></div>
+                                    <input type="file" accept="image/*" style="display:none;" onchange="alert('Student ID Uploaded (Demo)')">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EDUCATION -->
+                    <div id="tabEducation" class="tab-pane">
+                        <div class="section-title">University Information</div>
+                        <div class="grid-2">
+                            <div class="input-group"><label>University</label><input type="text" id="inpUni" class="form-input" placeholder="e.g. University of Rajshahi"></div>
+                            <div class="input-group"><label>Department</label><input type="text" id="inpDept" class="form-input" placeholder="e.g. Biochemistry"></div>
+                        </div>
+                        <div class="input-group" style="margin-bottom:30px;"><label>Session</label><input type="text" id="inpSession" class="form-input" placeholder="e.g. 2021-22"></div>
+
+                        <div class="section-title">HSC & SSC</div>
+                        <div class="grid-2">
+                            <div class="input-group"><label>HSC College</label><input type="text" id="inpHscCollege" class="form-input"></div>
+                            <div class="input-group"><label>HSC GPA</label><input type="text" id="inpHscGpa" class="form-input"></div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="input-group"><label>SSC School</label><input type="text" id="inpSscSchool" class="form-input"></div>
+                            <div class="input-group"><label>SSC GPA</label><input type="text" id="inpSscGpa" class="form-input"></div>
+                        </div>
+                        <button class="btn-save-bottom" onclick="saveEducation()">Save Education</button>
+                    </div>
+
+                    <!-- TEACHING -->
+                    <div id="tabTeaching" class="tab-pane">
+                        <div class="section-title">Teaching Details</div>
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label>Preferred Medium</label>
+                                <input type="text" id="inpMedium" class="form-input" placeholder="e.g. Bangla Medium">
+                            </div>
+                            <div class="input-group">
+                                <label>Years of Experience</label>
+                                <input type="number" id="inpExpYears" class="form-input" placeholder="e.g. 3">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom:25px;">
+                            <label>Expected Monthly Salary (BDT)</label>
+                            <input type="number" id="inpExpSalary" class="form-input" placeholder="e.g. 4000">
+                        </div>
+                        <button class="btn-save-bottom" onclick="saveTeaching()">Save Teaching Profile</button>
+                    </div>
+
+                    <!-- LOCATION -->
+                    <div id="tabLocation" class="tab-pane">
+                        <div class="section-title">Current & Home Location</div>
+                        <div class="input-group" style="margin-bottom: 25px;">
+                            <label>Current Area/City</label>
+                            <input type="text" id="inpCurrentLoc" class="form-input" placeholder="e.g. Binodpur, Rajshahi">
+                        </div>
+                        <div class="grid-3">
+                            <div class="input-group"><label>Division</label><select id="divSelect" class="form-select" onchange="loadDistricts()"><option value="">Select Division</option></select></div>
+                            <div class="input-group"><label>District</label><select id="distSelect" class="form-select" onchange="loadUpazilas()"><option value="">Select District</option></select></div>
+                            <div class="input-group"><label>Upazila</label><select id="upaSelect" class="form-select"><option value="">Select Upazila</option></select></div>
+                        </div>
+                        <button class="btn-save-bottom" onclick="saveLocation()">Save Location</button>
+                    </div>
+
+                    <!-- EXPERIENCE -->
+                    <div id="tabExperience" class="tab-pane">
+                        <div class="section-title">Previous Experience</div>
+                        <div class="grid-2">
+                            <div class="input-group"><label>Class/Level Taught</label><input type="text" id="inpPastClass" class="form-input" placeholder="e.g. HSC"></div>
+                            <div class="input-group"><label>Duration</label><input type="text" id="inpPastDuration" class="form-input" placeholder="e.g. 2 Years"></div>
+                        </div>
+                        <button class="btn-save-bottom" onclick="saveExperience()">Save Experience</button>
+                    </div>
+
+                    <!-- BIO -->
+                    <div id="tabBio" class="tab-pane">
+                        <div class="section-title">About You</div>
+                        <textarea id="inpBio" class="form-input" rows="6" placeholder="Write a compelling bio..." style="resize:vertical; margin-bottom:20px;"></textarea>
+                        <button class="btn-save-bottom" onclick="saveBio()">Save Bio</button>
+                    </div>
+
+                    <!-- SECURITY -->
+                    <div id="tabSecurity" class="tab-pane">
+                        <div class="section-title">Change Password</div>
+                        <div class="input-group" style="margin-bottom:20px;"><label>New Password</label><input type="password" id="newPass" class="form-input" placeholder="Min. 6 characters"></div>
+                        <div class="input-group" style="margin-bottom:20px;"><label>Confirm Password</label><input type="password" id="confirmNewPass" class="form-input" placeholder="Re-enter password"></div>
+                        <button class="btn-save-bottom" onclick="changePassword()">Update Password</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCrrNSdlbP9233viAU9-hywG_ibMbKC89o",
+            authDomain: "nextgen-tuition-media.firebaseapp.com",
+            projectId: "nextgen-tuition-media",
+            storageBucket: "nextgen-tuition-media.firebasestorage.app",
+            messagingSenderId: "512673325761",
+            appId: "1:512673325761:web:195683718dc0b88860ea40"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        function switchTab(id, btn) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('navUserContact').innerText = user.phoneNumber || user.email || "User";
+                loadProfileData(user.uid);
+            } else { window.location.href = 'index.html'; }
+        });
+
+        // ================= LOAD PROFILE DATA =================
+        function loadProfileData(uid) {
+            db.collection('users').doc(uid).get().then(doc => {
+                if(doc.exists) {
+                    const data = doc.data();
+                    document.getElementById('displayName').innerText = data.name || data.nameBn || 'New User';
+                    document.getElementById('displaySalary').innerText = data.expectedSalary ? '৳' + data.expectedSalary : 'Not Set';
+                    document.getElementById('displayBio').innerText = data.bio || 'আপনার বায়ো এখানে দেখা যাবে।';
+                    
+                    if(data.profilePic) {
+                        document.getElementById('profilePicImg').src = data.profilePic;
+                        document.getElementById('profilePicImg').style.display = 'block';
+                        document.getElementById('picPlaceholder').style.display = 'none';
+                    }
+
+                    // Auto-fill inputs if data exists
+                    if(data.name) document.getElementById('inpName').value = data.name;
+                    if(data.nameBn) document.getElementById('inpNameBn').value = data.nameBn;
+                    if(data.gender) document.getElementById('inpGender').value = data.gender;
+                    if(data.email) document.getElementById('inpEmail').value = data.email;
+                    if(data.whatsapp) document.getElementById('inpWhatsapp').value = data.whatsapp;
+                    if(data.dob) document.getElementById('inpDob').value = data.dob;
+                    
+                    if(data.uni) document.getElementById('inpUni').value = data.uni;
+                    if(data.dept) document.getElementById('inpDept').value = data.dept;
+                    if(data.session) document.getElementById('inpSession').value = data.session;
+                    if(data.hsc_college) document.getElementById('inpHscCollege').value = data.hsc_college;
+                    if(data.hsc_gpa) document.getElementById('inpHscGpa').value = data.hsc_gpa;
+                    if(data.ssc_school) document.getElementById('inpSscSchool').value = data.ssc_school;
+                    if(data.ssc_gpa) document.getElementById('inpSscGpa').value = data.ssc_gpa;
+
+                    if(data.teachingMedium) document.getElementById('inpMedium').value = data.teachingMedium;
+                    if(data.experienceYears) document.getElementById('inpExpYears').value = data.experienceYears;
+                    if(data.expectedSalary) document.getElementById('inpExpSalary').value = data.expectedSalary;
+
+                    if(data.currentLocation) document.getElementById('inpCurrentLoc').value = data.currentLocation;
+
+                    if(data.pastClass) document.getElementById('inpPastClass').value = data.pastClass;
+                    if(data.pastDuration) document.getElementById('inpPastDuration').value = data.pastDuration;
+
+                    if(data.bio) document.getElementById('inpBio').value = data.bio;
+                }
+            });
+        }
+
+        // ================= SAVE FUNCTIONS =================
+        function saveInfo() {
+            const u = auth.currentUser;
+            if(!u) return;
+            const data = {
+                name: document.getElementById('inpName').value,
+                nameBn: document.getElementById('inpNameBn').value,
+                gender: document.getElementById('inpGender').value,
+                email: document.getElementById('inpEmail').value,
+                whatsapp: document.getElementById('inpWhatsapp').value,
+                dob: document.getElementById('inpDob').value
+            };
+            db.collection('users').doc(u.uid).set(data, {merge:true}).then(() => alert('✅ Personal Info Saved!'));
+        }
+
+        function saveEducation() {
+            const u = auth.currentUser;
+            if(!u) return;
+            const data = {
+                uni: document.getElementById('inpUni').value,
+                dept: document.getElementById('inpDept').value,
+                session: document.getElementById('inpSession').value,
+                hsc_college: document.getElementById('inpHscCollege').value,
+                hsc_gpa: document.getElementById('inpHscGpa').value,
+                ssc_school: document.getElementById('inpSscSchool').value,
+                ssc_gpa: document.getElementById('inpSscGpa').value
+            };
+            db.collection('users').doc(u.uid).set(data, {merge:true}).then(() => alert('✅ Education Saved!'));
+        }
+
+        function saveTeaching() {
+            const u = auth.currentUser;
+            if(!u) return;
+            const data = {
+                teachingMedium: document.getElementById('inpMedium').value,
+                experienceYears: document.getElementById('inpExpYears').value,
+                expectedSalary: document.getElementById('inpExpSalary').value
+            };
+            db.collection('users').doc(u.uid).set(data, {merge:true}).then(() => alert('✅ Teaching Details Saved!'));
+        }
+
+        function saveLocation() {
+            const u = auth.currentUser;
+            if(!u) return;
+            const data = {
+                currentLocation: document.getElementById('inpCurrentLoc').value,
+                division: document.getElementById('divSelect').value,
+                district: document.getElementById('distSelect').value,
+                upazila: document.getElementById('upaSelect').value
+            };
+            db.collection('users').doc(u.uid).set(data, {merge:true}).then(() => alert('✅ Location Saved!'));
+        }
+
+        function saveExperience() {
+            const u = auth.currentUser;
+            if(!u) return;
+            const data = {
+                pastClass: document.getElementById('inpPastClass').value,
+                pastDuration: document.getElementById('inpPastDuration').value
+            };
+            db.collection('users').doc(u.uid).set(data, {merge:true}).then(() => alert('✅ Experience Saved!'));
+        }
+
+        function saveBio() {
+            const u = auth.currentUser;
+            if(!u) return;
+            db.collection('users').doc(u.uid).set({bio: document.getElementById('inpBio').value}, {merge:true}).then(() => alert('✅ Bio Saved!'));
+        }
+
+        // ================= CHANGE PASSWORD =================
+        function changePassword() {
+            const newPass = document.getElementById('newPass').value;
+            const confirmPass = document.getElementById('confirmNewPass').value;
+            
+            if(newPass.length < 6) return alert("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!");
+            if(newPass !== confirmPass) return alert("পাসওয়ার্ড মিলছে না!");
+
+            auth.currentUser.updatePassword(newPass).then(() => {
+                alert('✅ Password Changed Successfully!');
+                document.getElementById('newPass').value = ''; document.getElementById('confirmNewPass').value = '';
+            }).catch(err => {
+                if(err.code === 'auth/requires-recent-login') alert('নিরাপত্তার স্বার্থে পুনরায় লগইন করে তারপর পাসওয়ার্ড পরিবর্তন করুন।');
+                else alert('Error: ' + err.message);
+            });
+        }
+
+        // ================= BASE64 IMAGE UPLOAD =================
+        function uploadProfilePic(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                if (file.size > 2 * 1024 * 1024) return alert("ছবির সাইজ ২ মেগাবাইটের কম হতে হবে!");
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Str = e.target.result;
+                    document.getElementById('profilePicImg').src = base64Str;
+                    document.getElementById('profilePicImg').style.display = 'block';
+                    document.getElementById('picPlaceholder').style.display = 'none';
+                    
+                    const u = auth.currentUser;
+                    if(u) {
+                        db.collection('users').doc(u.uid).set({ profilePic: base64Str }, {merge: true})
+                        .then(() => alert('✅ Profile Picture Updated in Database!'));
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // ================= LOCATION API =================
+        let currentDistricts = [];
+        fetch('https://bdapis.com/api/v1.1/divisions').then(res => res.json()).then(data => {
+            const divSelect = document.getElementById('divSelect');
+            data.data.forEach(div => divSelect.innerHTML += `<option value="${div.division}">${div.division}</option>`);
+        });
+
+        function loadDistricts() {
+            const divName = document.getElementById('divSelect').value;
+            const distSelect = document.getElementById('distSelect');
+            distSelect.innerHTML = '<option value="">Select District</option>';
+            document.getElementById('upaSelect').innerHTML = '<option value="">Select Upazila</option>';
+            if(!divName) return;
+            fetch(`https://bdapis.com/api/v1.1/division/${divName}`).then(res => res.json()).then(data => {
+                currentDistricts = data.data;
+                data.data.forEach(dist => distSelect.innerHTML += `<option value="${dist.district}">${dist.district}</option>`);
+            });
+        }
+
+        function loadUpazilas() {
+            const distName = document.getElementById('distSelect').value;
+            const upaSelect = document.getElementById('upaSelect');
+            upaSelect.innerHTML = '<option value="">Select Upazila</option>';
+            const districtObj = currentDistricts.find(d => d.district === distName);
+            if(districtObj && districtObj.upazilla) districtObj.upazilla.forEach(upa => upaSelect.innerHTML += `<option value="${upa}">${upa}</option>`);
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            auth.signOut().then(() => { localStorage.clear(); window.location.href = 'index.html'; });
+        });
+    </script>       
+</body>
+</html>

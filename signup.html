@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nextgen Tuition Media</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input { padding: 10px; margin: 5px; width: 250px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; color: white; border: none; border-radius: 5px; margin-top: 10px; }
+        .btn-green { background-color: #28a745; }
+        .btn-green:hover { background-color: #218838; }
+        .btn-red { background-color: #dc3545; }
+        .btn-red:hover { background-color: #c82333; }
+        #message { margin-top: 20px; font-weight: bold; }
+        
+        #welcome-section { display: none; margin-top: 30px; }
+    </style>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+    <div id="signup-section">
+        <h2>নতুন একাউন্ট তৈরি করুন</h2>
+        <input type="email" id="email" placeholder="আপনার ইমেইল দিন" required><br>
+        <input type="password" id="password" placeholder="পাসওয়ার্ড দিন (অন্তত ৬ অক্ষরের)" required><br>
+        <button id="signup-btn" class="btn-green">Sign Up</button>
+    </div>
+
+    <div id="welcome-section">
+        <h2>স্বাগতম! 🎉</h2>
+        <p>আপনি লগইন করে আছেন: <span id="user-email" style="color: blue;"></span></p>
+        <button id="logout-btn" class="btn-red">Log Out</button>
+    </div>
+
+    <p id="message"></p>
+
+    <script>
+        // আপনার ফায়ারবেস কনফিগারেশন
+        const firebaseConfig = {
+            apiKey: "AIzaSyCrrNSdlbP9233viAU9-hywG_ibMbKC89o",
+            authDomain: "nextgen-tuition-media.firebaseapp.com",
+            projectId: "nextgen-tuition-media",
+            storageBucket: "nextgen-tuition-media.firebasestorage.app",
+            messagingSenderId: "512673325761",
+            appId: "1:512673325761:web:195683718dc0b88860ea40",
+            measurementId: "G-0B4160QMTS"
+        };
+
+        // ফায়ারবেস চালু করা
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        const signupSection = document.getElementById("signup-section");
+        const welcomeSection = document.getElementById("welcome-section");
+        const userEmailText = document.getElementById("user-email");
+        const messageElement = document.getElementById("message");
+        
+        const signupBtn = document.getElementById("signup-btn");
+        const logoutBtn = document.getElementById("logout-btn");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+
+        // লগইন অবস্থা চেক করা
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                signupSection.style.display = "none";
+                welcomeSection.style.display = "block";
+                userEmailText.innerText = user.email;
+                messageElement.innerText = "";
+            } else {
+                signupSection.style.display = "block";
+                welcomeSection.style.display = "none";
+            }
+        });
+
+        // সাইন-আপ করার ফাংশন
+        signupBtn.addEventListener("click", () => {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            if(password.length < 6) {
+                messageElement.innerText = "পাসওয়ার্ড অন্তত ৬ অক্ষরের হতে হবে! ❌";
+                messageElement.style.color = "red";
+                return;
+            }
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    messageElement.innerText = "একাউন্ট সফলভাবে তৈরি হয়েছে! ✅";
+                    messageElement.style.color = "green";
+                })
+                .catch((error) => {
+                    messageElement.innerText = "ভুল হয়েছে: " + error.message + " ❌";
+                    messageElement.style.color = "red";
+                });
+        });
+
+        // লগআউট করার ফাংশন
+        logoutBtn.addEventListener("click", () => {
+            auth.signOut().then(() => {
+                messageElement.innerText = "আপনি সফলভাবে লগআউট হয়েছেন!";
+                messageElement.style.color = "green";
+                emailInput.value = "";
+                passwordInput.value = "";
+            }).catch((error) => {
+                messageElement.innerText = "লগআউট করতে সমস্যা হয়েছে!";
+            });
+        });
+    </script>
+</body>
+</html>
